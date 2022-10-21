@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* config font interface */
+@import url('http://fonts.cdnfonts.com/css/itc-avant-garde-gothic-std-book');
+
+@layer base {
+  html {
+    font-family: 'ITC Avant Garde Gothic Std Book', sans-serif;
+  }
+}
