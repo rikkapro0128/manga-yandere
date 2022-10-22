@@ -5,9 +5,14 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        'menu-genres': 'repeat(4, minmax(120px, 1fr))'
+      }
+    },
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    
   ],
 }
