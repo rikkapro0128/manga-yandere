@@ -6,5 +6,6 @@ import router from '@/routes/index.js';
 
 /* Styles Global */
 import '@/assets/styles/tailwindcss/index.css';
+import "element-plus/dist/index.css";
 
 createApp(App).use(router).mount('#app')

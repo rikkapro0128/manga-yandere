@@ -9,10 +9,10 @@ module.exports = defineConfig({
         /* options */
         resolvers: [ElementPlusResolver()],
       }),
-      require('unplugin-auto-import/webpack')({ 
-        /* options */ 
-        resolvers: [ElementPlusResolver()],
-      }),
+      // require('unplugin-auto-import/webpack')({ 
+      //   /* options */ 
+      //   resolvers: [ElementPlusResolver()],
+      // }),
     ],
   },
 })
