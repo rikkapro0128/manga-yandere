@@ -31,11 +31,11 @@
           <!-- THIS TOOLBOX -->
           <div class="text-xs mt-2 flex">
             <span class="mx-2 cursor-pointer hover:text-indigo-600 transition-colors">
-              <el-tooltip effect="light" placement="top-start">
+              <el-tooltip v-model:visible="stateReact" effect="light" placement="top-start">
                 thích
                 <template #content>
                   <!-- content for the header slot -->
-                  <ReactDefault />
+                  <ReactDefault @onReact="onReact" />
                 </template>
               </el-tooltip>
             </span>
@@ -48,7 +48,10 @@
     </div>
     <Transition>
       <div v-if="showReply" class="ml-[60px]">
-        <ReplyDefault :focus="true" :reply="replyCtx" @replying="onReplying" class="order-last" />
+        <el-tooltip :visible="showTooltipReply" effect="dark" placement="right" content="Nhấn enter để bình luận">
+          <ReplyDefault @focusin="(state) => showTooltipReply = true" @focusout="(state) => showTooltipReply = false"
+            :focus="true" :reply="replyCtx" @replying="onReplying" class="order-last" />
+        </el-tooltip>
       </div>
     </Transition>
   </div>
@@ -65,6 +68,8 @@ const props = defineProps({
 
 const replyCtx = reactive({ name: '', target: props.comment.name, content: '' });
 const showReply = ref(false);
+const showTooltipReply = ref(false);
+const stateReact = ref(false);
 const hashImage = Date.now() % 100000;
 const maxLevel = 5;
 const randomLevel = Math.floor(Math.random() * maxLevel) + 1;
@@ -72,6 +77,11 @@ const percentForLevel = Math.floor(randomLevel * 89 / 5);
 
 function onReplying(value) {
   console.log(value);
+}
+
+function onReact(state) {
+  console.log(state);
+  stateReact.value = false;
 }
 
 </script>

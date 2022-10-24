@@ -1,9 +1,13 @@
 <template>
-  <div @click="sideToManga" class="flex justify-center">
-    <div class="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-white shadow-lg xl:flex-col">
-      <img
-        class="cursor-pointer w-full h-72 md:h-auto object-cover md:w-48 rounded-t-lg md:rounded-none md:rounded-l-lg max-w-xs hover:scale-[1.02] transition duration-300 ease-in-out"
+  <div @click="sideToManga"
+    class="cursor-pointer flex justify-center relative hover:-translate-y-1 transition-transform  duration-300">
+    <!-- $number chapter -->
+    <div
+      class="h-72 md:h-auto md:w-48 flex flex-col md:flex-row md:max-w-xl  bg-white rounded-lg shadow-lg xl:flex-col">
+      <!-- $image card -->
+      <img class="w-full object-cover max-w-xs block"
         src="https://st.ntcdntempv3.com/data/comics/187/da-nhan-tai-sinh.jpg" alt="" />
+      <!-- $info card -->
       <div class="p-6 flex flex-col justify-start">
         <h5 class="text-gray-900 text-lg font-medium mb-2">Dã nhân tái sinh</h5>
         <p class="text-gray-700 text-base mb-4 line-clamp-5 xl:hidden">
@@ -13,6 +17,10 @@
         </p>
         <p class="text-gray-600 text-xs">Last updated 3 mins ago</p>
       </div>
+    </div>
+    <div
+      class="absolute top-2 right-2 rounded-full border-indigo-600 bg-white w-12 h-12 flex justify-center items-center border-[2px] shadow-sm shadow-indigo-600">
+      12
     </div>
   </div>
 </template>

@@ -2,11 +2,10 @@
   <div class="w-full">
     <div class="max-w-screen-xl bg-white shadow sm:rounded-lg flex justify-center flex-1">
       <div class="relative flex-1 bg-indigo-100 text-center hidden lg:flex overflow-hidden">
-        <div class="absolute top-0 left-0 bottom-0 right-0 bg-cover blur-sm"
-          style="background-image: url('https://i.pinimg.com/originals/65/f5/ca/65f5cafe76d676d07173ac949690979f.jpg');">
+        <div class="absolute top-0 left-0 bottom-0 right-0 bg-cover blur-sm" :style="ImageBg">
         </div>
         <div class="relative m-8 xl:m-12 w-full bg-cover bg-center bg-no-repeat hover:scale-[1.02] transition-transform"
-          style="background-image: url('https://i.pinimg.com/originals/65/f5/ca/65f5cafe76d676d07173ac949690979f.jpg');">
+          :style="ImageBg">
         </div>
       </div>
       <div class="lg:w-1/2 p-6 sm:p-12">
@@ -113,6 +112,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 
 const typeSign = computed(() => route.query.type === 'in' ? 'đăng nhập' : 'đăng ký');
+const ImageBg = { backgroundImage: 'url(' + require(`@/assets/image/bg/bg_sign.png`) + ')' }
 
 </script>
 

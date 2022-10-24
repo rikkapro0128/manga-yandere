@@ -1,6 +1,6 @@
 <template>
   <div ref="$reply">
-    <el-input :spellcheck="false" v-model="content"
+    <el-input :spellcheck="false" v-model="content" @focusin="$emit('focusin')" @focusout="$emit('focusout')"
       @input="$emit('replying', { ...reply, content: content.split(customeTarget)[1] || '' })"
       :autosize="{ minRows: 2, maxRows: 4 }" type="textarea" placeholder="Please input" />
   </div>
