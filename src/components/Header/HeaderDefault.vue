@@ -49,13 +49,20 @@
           <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Xếp hạng</a>
           <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Hội nhóm</a>
         </div>
-        <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
+        <div v-if="!stateSign" class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
           <router-link to="/sign?type=in"
             class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">Đăng
             nhập</router-link>
           <router-link to="/sign?type=up"
             class="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
             Đăng ký</router-link>
+        </div>
+        <div class="cursor-pointer flex items-center" v-else>
+          <!-- name user -->
+          <p class="mr-2">Chào bạn, {{ userPayload.name }}</p>
+          <!-- avatar user -->
+          <div class="w-8 h-8 rounded-full bg-no-repeat bg-cover"
+            :style="{ backgroundImage: 'url(' + userPayload.avatar + ')' }"></div>
         </div>
       </div>
     </div>
@@ -125,7 +132,9 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { application as FirebaseApp } from '@/firebase/instance.js';
 
 const genres = [
   {
@@ -356,8 +365,26 @@ const resources = [
 ]
 
 const descMain = ref('');
+const stateSign = ref(false);
+const userPayload = reactive({ name: '', avatar: '' });
+
+const auth = getAuth(FirebaseApp);
 
 function handleDescGenres(value) {
   descMain.value = value;
 }
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    userPayload.name = user.displayName;
+    userPayload.avatar = user.photoURL;
+    stateSign.value = true;
+  } else {
+    // User is signed out
+    stateSign.value = false;
+  }
+});
+
 </script>

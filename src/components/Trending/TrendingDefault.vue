@@ -1,8 +1,12 @@
 <template>
   <div class="mb-14 mt-12 select-none	">
-    <swiper :pagination="true" class="mySwiper">
+    <swiper @click="clickMangaTrend" @swiper="onSwiper" @slideChange="viewer" :modules="modules" :autoplay="{
+      delay: 5000,
+      disableOnInteraction: true,
+      pauseOnMouseEnter: true
+    }" :loop="true" class="mySwiper">
       <swiper-slide :key="trendNow" v-for="trendNow in trendingDemo" class="h-[540px]">
-        <div class="p-12 relative w-full h-full grid grid-cols-3">
+        <div class="relative w-full h-full grid grid-cols-3">
           <div class="flex flex-col justify-end">
             <!-- trend name -->
             <div
@@ -35,23 +39,50 @@
             <!-- trend genres -->
             <p class="pt-3 line-clamp-4 italic text-slate-800">{{ trendNow.desc }}</p>
           </div>
+          <div class="col-span-2 relative overflow-hidden">
+            <div class="absolute -z-10 top-0 left-0 bottom-0 right-0 bg-no-repeat bg-cover bg-center blur-lg mx-12"
+              :style="{ backgroundImage: `url(${trendNow.thumbnail})` }">
+            </div>
+            <div
+              class="w-2/4 h-full m-auto bg-no-repeat bg-cover bg-center scale-90 hover:scale-95 transition-transform rounded-md"
+              :style="{ backgroundImage: `url(${trendNow.thumbnail})` }"></div>
+          </div>
         </div>
       </swiper-slide>
     </swiper>
+    <div class="flex justify-end items-center mt-4">
+      <div class="flex h-10 px-3 mr-3 items-center rounded-full border-[2px] border-indigo-600">
+        <div class="w-5 h-5 mx-1 rounded-full transition-colors cursor-pointer"
+          :style="{ backgroundColor: indexSlide === num - 1 ? '#4F46E5' : '#CBD5E1' }" :key="num"
+          @click="swiperCtx.slideTo(num - 1)" v-for="num in trendingDemo.length"></div>
+      </div>
+      <div>
+        <el-button :disabled="touchLimit.start" @click="swiperCtx.slidePrev()" color="#4338CA" size="large" circle>
+          <ArrowUturnLeftIcon class="w-5 h-5 fill-white" />
+        </el-button>
+        <el-button :disabled="touchLimit.end" @click="swiperCtx.slideNext()" color="#4338CA" size="large" circle>
+          <ArrowUturnRightIcon class="w-5 h-5 fill-white" />
+        </el-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { StarIcon } from '@heroicons/vue/24/solid';
+import {
+  StarIcon,
+  ArrowUturnRightIcon,
+  ArrowUturnLeftIcon
+} from '@heroicons/vue/24/solid';
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
-// import required modules
-// import { Pagination } from "swiper";
+import { Autoplay } from 'swiper';
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 
-// const modules = [Pagination];
+import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 const trendingDemo = [
   {
@@ -111,7 +142,27 @@ const trendingDemo = [
   },
 ]
 
-// const font = ['Comforter Brush', 'Lobster', 'Pacifico'];
+const router = useRouter();
+const swiperCtx = ref();
+const indexSlide = ref(0);
+const touchLimit = reactive({ start: false, end: false });
+const modules = [Autoplay];
+
+const onSwiper = (swiper) => {
+  swiperCtx.value = swiper;
+  touchLimit.start = swiper.isBeginning;
+  touchLimit.end = swiper.isEnd;
+};
+
+const viewer = (swiper) => {
+  touchLimit.start = swiper.isBeginning;
+  touchLimit.end = swiper.isEnd;
+  indexSlide.value = swiper.realIndex;
+}
+
+const clickMangaTrend = () => {
+  router.push('/manga');
+}
 
 </script>
 

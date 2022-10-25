@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <div class="max-w-screen-xl bg-white shadow sm:rounded-lg flex justify-center flex-1">
-      <div class="relative flex-1 bg-indigo-100 text-center hidden lg:flex overflow-hidden">
+      <div class="relative h-[710px] flex-1 bg-indigo-100 text-center hidden lg:flex overflow-hidden">
         <div class="absolute top-0 left-0 bottom-0 right-0 bg-cover blur-sm" :style="ImageBg">
         </div>
         <div class="relative m-8 xl:m-12 w-full bg-cover bg-center bg-no-repeat hover:scale-[1.02] transition-transform"
@@ -19,8 +19,8 @@
             Hãy {{ typeSign }} trải nghiệm
           </h1>
           <div class="w-full flex-1 mt-8">
-            <div class="flex flex-col items-center">
-              <button
+            <div v-if="$route.query.type === 'in'" class="flex flex-col items-center">
+              <button @click="handleSign('google')"
                 class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                 <div class="bg-white p-2 rounded-full">
                   <svg class="w-4" viewBox="0 0 533.5 544.3">
@@ -39,7 +39,7 @@
                   </svg>
                 </div>
                 <span class="ml-4">
-                  {{ typeSign.charAt(0).toUpperCase() + typeSign.slice(1) }} với Google
+                  Đăng nhập với Google
                 </span>
               </button>
 
@@ -52,12 +52,12 @@
                   </svg>
                 </div>
                 <span class="ml-4">
-                  {{ typeSign.charAt(0).toUpperCase() + typeSign.slice(1) }} với GitHub
+                  Đăng nhập với GitHub
                 </span>
               </button>
             </div>
 
-            <div class="my-12 border-b text-center">
+            <div v-if="$route.query.type === 'in'" class="my-12 border-b text-center">
               <div
                 class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
                 hoặc
@@ -108,11 +108,37 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { application as FirebaseApp } from "@/firebase/instance.js";
 
 const route = useRoute();
+const provider = new GoogleAuthProvider();
+const auth = getAuth(FirebaseApp);
 
 const typeSign = computed(() => route.query.type === 'in' ? 'đăng nhập' : 'đăng ký');
 const ImageBg = { backgroundImage: 'url(' + require(`@/assets/image/bg/bg_sign.png`) + ')' }
+
+provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+auth.languageCode = 'vi';
+
+const handleSign = (type) => {
+  if (type === 'google') {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log(user);
+      }).catch((error) => {
+        // Handle Errors here.
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
+        console.log(error.code, error.message);
+      });
+  }
+}
 
 </script>
 

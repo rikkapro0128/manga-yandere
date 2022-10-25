@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import App from './App.vue';
+import { application as firebaseApp } from '@/firebase/instance.js';
 
 /* Your Configuration */
 import router from '@/routes/index.js';
@@ -8,4 +9,6 @@ import router from '@/routes/index.js';
 import '@/assets/styles/tailwindcss/index.css';
 import "element-plus/dist/index.css";
 
-createApp(App).use(router).mount('#app')
+const implementApp = createApp(App);
+
+implementApp.provide('FirebaseAppplication', firebaseApp).use(router).mount('#app')

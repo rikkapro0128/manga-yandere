@@ -9,7 +9,7 @@
       </transition>
     </router-view>
     <!-- FOOTER COMPONENT -->
-    <FooterDefault />
+    <FooterDefault class="mx-6" />
   </div>
 </template>
 

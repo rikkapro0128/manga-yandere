@@ -41,7 +41,8 @@
                 <component class="w-5 h-5 text-slate-500" :is="field in snipetType ? snipetType[field].icon : ''">
                 </component>
                 <h4 class="font-bold whitespace-nowrap ml-2 text-slate-500">{{ field in snipetType ?
-                snipetType[field].vnsub : '' }}
+                    snipetType[field].vnsub : ''
+                }}
                 </h4>
               </div>
               <div class="flex flex-wrap pl-5 -m-2" v-if="field === 'genres'">
@@ -67,7 +68,8 @@
           </div>
         </el-divider>
         <p ref="expand" :style="{ lineClamp: expandStatus.isExpand ? 'unset' : '4' }" class="text-sm line-clamp-4">{{
-        demoDesc }}</p>
+            demoDesc
+        }}</p>
         <div class="py-2 mt-2 text-right" v-if="expandStatus.shouldExpand">
           <el-button @click="expandStatus.isExpand = !expandStatus.isExpand" type="primary">
             <ArrowsPointingOutIcon class="w-4 h-4 mr-2" />
@@ -84,7 +86,7 @@
           </div>
         </el-divider>
         <el-table-v2 :columns="columnsChapter" :data="datasChapter" :width="800" fixed
-          :height="(datasChapter.length*50) + 50" :max-height="500" />
+          :height="(datasChapter.length * 50) + 50" :max-height="500" />
       </div>
       <!-- THIS IS DISCUSSION MANGA -->
       <div>
@@ -144,7 +146,11 @@
       </div>
     </div>
     <div>
-
+      <el-tabs type="border-card">
+        <el-tab-pane label="Thống kê"></el-tab-pane>
+        <el-tab-pane label="Đánh giá nổi bật"></el-tab-pane>
+        <el-tab-pane label="Chi tiết"></el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -277,6 +283,14 @@ const renderNumberComnents = (number) => {
 
 </script>
 
-<style scoped>
+<style lang="css" scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease;
+}
 
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 </style>
