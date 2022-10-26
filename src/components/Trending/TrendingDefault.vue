@@ -2,7 +2,7 @@
   <div class="mb-14 mt-12 select-none	">
     <swiper @click="clickMangaTrend" @swiper="onSwiper" @slideChange="viewer" :modules="modules" :autoplay="{
       delay: 5000,
-      disableOnInteraction: true,
+      disableOnInteraction: false,
       pauseOnMouseEnter: true
     }" :loop="true" class="mySwiper">
       <swiper-slide :key="trendNow" v-for="trendNow in trendingDemo" class="h-[540px]">
@@ -54,13 +54,13 @@
       <div class="flex h-10 px-3 mr-3 items-center rounded-full border-[2px] border-indigo-600">
         <div class="w-5 h-5 mx-1 rounded-full transition-colors cursor-pointer"
           :style="{ backgroundColor: indexSlide === num - 1 ? '#4F46E5' : '#CBD5E1' }" :key="num"
-          @click="swiperCtx.slideTo(num - 1)" v-for="num in trendingDemo.length"></div>
+          @click="swiperCtx.slideTo(num)" v-for="num in trendingDemo.length"></div>
       </div>
       <div>
-        <el-button :disabled="touchLimit.start" @click="swiperCtx.slidePrev()" color="#4338CA" size="large" circle>
+        <el-button @click="swiperCtx.slidePrev()" color="#4338CA" size="large" circle>
           <ArrowUturnLeftIcon class="w-5 h-5 fill-white" />
         </el-button>
-        <el-button :disabled="touchLimit.end" @click="swiperCtx.slideNext()" color="#4338CA" size="large" circle>
+        <el-button @click="swiperCtx.slideNext()" color="#4338CA" size="large" circle>
           <ArrowUturnRightIcon class="w-5 h-5 fill-white" />
         </el-button>
       </div>

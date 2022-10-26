@@ -60,8 +60,10 @@
         <div class="cursor-pointer flex items-center" v-else>
           <!-- name user -->
           <p class="mr-2">Chào bạn, {{ userPayload.name }}</p>
+          <!-- name user -->
+          <p class="mx-2">{{ stateUser.sign.test }}</p>
           <!-- avatar user -->
-          <div class="w-8 h-8 rounded-full bg-no-repeat bg-cover"
+          <div @click="store.commit('increment')" class="w-8 h-8 rounded-full bg-no-repeat bg-cover"
             :style="{ backgroundImage: 'url(' + userPayload.avatar + ')' }"></div>
         </div>
       </div>
@@ -132,9 +134,12 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+// your import
 import { application as FirebaseApp } from '@/firebase/instance.js';
+import { useStore } from 'vuex'
 
 const genres = [
   {
@@ -369,6 +374,13 @@ const stateSign = ref(false);
 const userPayload = reactive({ name: '', avatar: '' });
 
 const auth = getAuth(FirebaseApp);
+const store = useStore();
+
+/* store - vuex */
+// => state
+const stateUser = reactive({
+  sign: computed(() => store.state.sign),
+});
 
 function handleDescGenres(value) {
   descMain.value = value;
