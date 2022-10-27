@@ -106,12 +106,14 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, h } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { ElNotification } from 'element-plus'
 import { application as FirebaseApp } from "@/firebase/instance.js";
 
 const route = useRoute();
+const router = useRouter();
 const provider = new GoogleAuthProvider();
 const auth = getAuth(FirebaseApp);
 
@@ -124,13 +126,16 @@ auth.languageCode = 'vi';
 const handleSign = (type) => {
   if (type === 'google') {
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(() => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        console.log(user);
+        ElNotification({
+          title: 'Nice',
+          type: 'success',
+          position: 'bottom-right',
+          duration: 5000,
+          message: h('i', { style: 'color: #67c23a' }, 'Đăng nhập thành công'),
+        })
+        router.push('/');
       }).catch((error) => {
         // Handle Errors here.
         // const errorCode = error.code;

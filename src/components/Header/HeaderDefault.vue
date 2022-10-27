@@ -1,7 +1,8 @@
 <template>
   <Popover class="relative bg-white">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6">
-      <div class="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 pb-12 pt-8">
+      <div class="grid grid-cols-3 items-center">
+        <!-- LOGO -->
         <div class="flex justify-start lg:w-0 lg:flex-1">
           <router-link class="flex items-center" to="/">
             <img class="h-8 w-auto sm:h-10" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -9,13 +10,7 @@
             <span class="ml-2 font-bold">Truyện</span>
           </router-link>
         </div>
-        <div class="-my-2 -mr-2 md:hidden">
-          <PopoverButton
-            class="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-            <span class="sr-only">Open menu</span>
-            <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-          </PopoverButton>
-        </div>
+        <!-- MAIN MENU -->
         <div as="nav" class="hidden space-x-10 md:flex">
           <Popover class="relative" v-slot="{ open }">
             <PopoverButton
@@ -49,97 +44,89 @@
           <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Xếp hạng</a>
           <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">Hội nhóm</a>
         </div>
-        <div v-if="!stateSign" class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          <router-link to="/sign?type=in"
-            class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">Đăng
-            nhập</router-link>
-          <router-link to="/sign?type=up"
-            class="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
-            Đăng ký</router-link>
-        </div>
-        <div class="cursor-pointer flex items-center" v-else>
-          <!-- name user -->
-          <p class="mr-2">Chào bạn, {{ userPayload.name }}</p>
-          <!-- name user -->
-          <p class="mx-2">{{ stateUser.sign.test }}</p>
-          <!-- avatar user -->
-          <div @click="store.commit('increment')" class="w-8 h-8 rounded-full bg-no-repeat bg-cover"
-            :style="{ backgroundImage: 'url(' + userPayload.avatar + ')' }"></div>
+        <!-- MENU USER PROFILE -->
+        <div class="justify-self-end">
+          <div class="cursor-pointer flex items-center content-end animate-pulse" v-if="stateSignStore.loading">
+            <div class="h-6 w-28 bg-slate-400 rounded mr-2"></div>
+            <div class="rounded-full bg-slate-400 h-8 w-8"></div>
+          </div>
+          <div v-else-if="!stateSign" class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
+            <router-link to="/sign?type=in"
+              class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">Đăng
+              nhập</router-link>
+            <router-link to="/sign?type=up"
+              class="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
+              Đăng ký</router-link>
+          </div>
+          <div class="flex items-center flex-nowrap cursor-pointer" v-else>
+            <Popover class="relative">
+              <PopoverButton ref="menuProfile" @click="stateMenuProfile = !stateMenuProfile"
+                class="flex items-center flex-nowrap outline-none">
+                <!-- name user -->
+                <p class="mr-2 text-base font-medium text-gray-500 hover:text-gray-900">Chào bạn,
+                  {{ stateSignStore.currentUser.displayName
+                  }}
+                </p>
+                <div class="flex items-center flex-nowrap cursor-pointer ">
+                  <!-- avatar user -->
+                  <div class="w-8 h-8 rounded-full bg-no-repeat bg-cover shadow-md"
+                    :style="{ backgroundImage: 'url(' + stateSignStore.currentUser.photoURL + ')' }"></div>
+                </div>
+              </PopoverButton>
+              <transition enter-active-class="transition duration-200 ease-out"
+                enter-from-class="translate-y-1 opacity-0" enter-to-class="translate-y-0 opacity-100"
+                leave-active-class="transition duration-150 ease-in" leave-from-class="translate-y-0 opacity-100"
+                leave-to-class="translate-y-1 opacity-0">
+                <PopoverPanel v-if="stateMenuProfile" static
+                  class="absolute mt-4 z-10 right-0 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white">
+                  <div class="grid grid-cols-1 grid-flow-row py-3">
+                    <span @click="$router.push('profile')" class="px-8 py-2 hover:bg-slate-100 transition-colors">Trang
+                      cá
+                      nhân</span>
+                    <span class="px-8 py-2 hover:bg-slate-100 transition-colors">Cài đặt</span>
+                    <span @click="dialogVisible = true" class="px-8 py-2 hover:bg-slate-100 transition-colors">Đăng
+                      xuất</span>
+                  </div>
+                </PopoverPanel>
+              </transition>
+            </Popover>
+          </div>
         </div>
       </div>
     </div>
-
-    <transition enter-active-class="duration-200 ease-out" enter-from-class="opacity-0 scale-95"
-      enter-to-class="opacity-100 scale-100" leave-active-class="duration-100 ease-in"
-      leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-      <PopoverPanel focus class="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden">
-        <div class="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-          <div class="px-5 pt-5 pb-6">
-            <div class="flex items-center justify-between">
-              <div>
-                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt="Your Company" />
-              </div>
-              <div class="-mr-2">
-                <PopoverButton
-                  class="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                  <span class="sr-only">Close menu</span>
-                  <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                </PopoverButton>
-              </div>
-            </div>
-            <div class="mt-6">
-              <nav class="grid gap-y-8">
-                <a v-for="item in genres" :key="item.name" :href="item.href"
-                  class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50">
-                  <component :is="item.icon" class="h-6 w-6 flex-shrink-0 text-indigo-600" aria-hidden="true" />
-                  <span class="ml-3 text-base font-medium text-gray-900">{{ item.name }}</span>
-                </a>
-              </nav>
-            </div>
-          </div>
-          <div class="space-y-6 py-6 px-5">
-            <div class="grid grid-cols-2 gap-y-4 gap-x-8">
-              <a href="#" class="text-base font-medium text-gray-900 hover:text-gray-700">Pricing</a>
-
-              <a href="#" class="text-base font-medium text-gray-900 hover:text-gray-700">Docs</a>
-              <a v-for="item in resources" :key="item.name" :href="item.href"
-                class="text-base font-medium text-gray-900 hover:text-gray-700">{{ item.name }}</a>
-            </div>
-            <div>
-              <a href="#"
-                class="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Đăng
-                ký</a>
-              <p class="mt-6 text-center text-base font-medium text-gray-500">
-                Existing customer?
-                {{ ' ' }}
-                <a href="#" class="text-indigo-600 hover:text-indigo-500">Đăng nhập</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </PopoverPanel>
-    </transition>
   </Popover>
+  <el-dialog v-model="dialogVisible" class="text-slate-700" title="Xác nhận đăng xuất" :append-to-body="true"
+    width="400px" :align-center="true">
+    <span class="text-slate-700">Bạn có chắc sẽ đăng xuất tài khoản này khỏi website?</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">Huỷ</el-button>
+        <el-button type="primary" @click="handleLogout">
+          Xác nhận
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
-import {
-  Bars3Icon,
-  BookmarkSquareIcon,
-  CalendarIcon,
-  LifebuoyIcon,
-  ShieldCheckIcon,
-  XMarkIcon,
-} from '@heroicons/vue/24/outline'
+// import {
+//   BookmarkSquareIcon,
+//   CalendarIcon,
+//   LifebuoyIcon,
+//   ShieldCheckIcon,
+// } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
-import { ref, reactive, computed } from 'vue';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { ref, computed } from 'vue';
+import { onClickOutside } from '@vueuse/core';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { getAuth } from 'firebase/auth';
+import { ElNotification } from 'element-plus'
+import { h } from 'vue'
 
 // your import
-import { application as FirebaseApp } from '@/firebase/instance.js';
-import { useStore } from 'vuex'
 
 const genres = [
   {
@@ -347,56 +334,40 @@ const genres = [
     "desc": "Xuyên Không, Xuyên Việt là thể loại nhân vật chính vì một lý do nào đó mà bị đưa đến sinh sống ở một không gian hay một khoảng thời gian khác. Nhân vật chính có thể trực tiếp xuyên qua bằng thân xác mình hoặc sống lại bằng thân xác người khác."
   }
 ]
-const resources = [
-  {
-    name: 'Help Center',
-    description: 'Get all of your questions answered in our forums or contact support.',
-    href: '#',
-    icon: LifebuoyIcon,
-  },
-  {
-    name: 'Guides',
-    description: 'Learn how to maximize our platform to get the most out of it.',
-    href: '#',
-    icon: BookmarkSquareIcon,
-  },
-  {
-    name: 'Events',
-    description: 'See what meet-ups and other events we might be planning near you.',
-    href: '#',
-    icon: CalendarIcon,
-  },
-  { name: 'Security', description: 'Understand how we take your privacy seriously.', href: '#', icon: ShieldCheckIcon },
-]
 
+const dialogVisible = ref(false)
+const menuProfile = ref(null)
+const stateMenuProfile = ref(false);
 const descMain = ref('');
-const stateSign = ref(false);
-const userPayload = reactive({ name: '', avatar: '' });
-
-const auth = getAuth(FirebaseApp);
 const store = useStore();
+const router = useRouter();
+const auth = getAuth();
 
-/* store - vuex */
-// => state
-const stateUser = reactive({
-  sign: computed(() => store.state.sign),
-});
+const stateSignStore = computed(() => store.state.sign);
+
+const stateSign = computed(() => stateSignStore.value.currentUser ? true : false);
 
 function handleDescGenres(value) {
   descMain.value = value;
 }
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    userPayload.name = user.displayName;
-    userPayload.avatar = user.photoURL;
-    stateSign.value = true;
-  } else {
-    // User is signed out
-    stateSign.value = false;
+async function handleLogout() {
+  dialogVisible.value = false;
+  if (auth.currentUser) {
+    await auth.signOut();
+    ElNotification({
+      title: 'Quá xịn',
+      type: 'success',
+      position: 'bottom-right',
+      duration: 5000,
+      message: h('i', { style: 'color: #67c23a' }, 'Bạn đã đăng xuất'),
+    })
+    router.push('/');
   }
-});
+}
+
+onClickOutside(menuProfile, () => {
+  if (stateMenuProfile.value) { stateMenuProfile.value = false }
+})
 
 </script>

@@ -5,9 +5,9 @@
       <div class="shadow-sm hover:shadow-md transition-shadow">
         <div class="relative overflow-hidden p-4 rounded-md">
           <div class="absolute top-0 left-0 right-0 bottom-0 -z-10 blur-md"
-            :style="{ backgroundImage: 'url(' + imageCache + ')' }">
+            :style="{ backgroundImage: 'url(' + currentUser.photoURL + ')' }">
           </div>
-          <img class="block" :src="imageCache" alt="avatar">
+          <img class="block w-full" :src="currentUser.photoURL" alt="avatar">
           <el-tooltip class="box-item" effect="dark" content="Chỉnh sửa" placement="right">
             <div
               class="absolute left-0 bottom-0 mb-8 ml-8 w-[40px] h-[40px] bg-indigo-600 shadow-md rounded-full flex justify-center items-center cursor-pointer">
@@ -42,7 +42,7 @@
         <!-- Name, nickname, sologan & bookmark -->
         <div class=" flex justify-between">
           <div class="flex items-start">
-            <p class="text-3xl font-black text-slate-700 cursor-default">{{ info.name }}</p>
+            <p class="text-3xl font-black text-slate-700 cursor-default">{{ currentUser.displayName }}</p>
             <div class="flex text-slate-500 text-base items-center ml-2 hover:underline cursor-pointer">
               <TagIcon class="w-4 h-4" />
               <span class="ml-1 ">{{ info.type }}</span>
@@ -82,9 +82,10 @@
 
 <script setup>
 import { MapPinIcon, TagIcon, BookmarkIcon, ChatBubbleLeftIcon, FlagIcon, PencilSquareIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/solid';
-import { reactive, ref } from 'vue';
+import { reactive, ref, computed } from 'vue';
+import { useStore } from 'vuex'
 
-const imageCache = 'https://i.pinimg.com/736x/49/27/aa/4927aa285cd5c1de43e34da92d520b57.jpg?v=' + Date.now() % 100000;
+// const imageCache = 'https://i.pinimg.com/736x/49/27/aa/4927aa285cd5c1de43e34da92d520b57.jpg?v=' + Date.now() % 100000;
 
 const info = reactive({
   name: 'Yandere 001',
@@ -96,6 +97,10 @@ const info = reactive({
     details: '10 - Trần bá giao - Phường 5 - Gò vấp',
   }
 });
+
+const store = useStore();
+
+const currentUser = computed(() => store.state.sign.currentUser);
 
 // eslint-disable-next-line no-unused-vars
 const toolChangeAvatar = ref(false);

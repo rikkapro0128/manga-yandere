@@ -1,6 +1,6 @@
 const state = {
-  sign: null,
-  test: 0,
+  currentUser: null,
+  loading: true,
 } 
 
 export default state;
